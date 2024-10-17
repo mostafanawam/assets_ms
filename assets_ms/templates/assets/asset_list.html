@@ -1,0 +1,174 @@
+
+{% extends 'base.html' %}
+{% block main %} 
+    <div class="container">
+        <h1 class="my-4">Assets Management</h1>
+        <div class="d-flex justify-content-between align-items-center my-3">
+            <h2 class="mb-0">Asset List</h2>
+
+            {% if user.is_superuser %}
+                <div>
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addAssetModal">
+                        <i class="fas fa-plus"></i> Add New Asset
+                    </button>
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead class="text-center">
+                    <tr>
+                        <th>Name</th>
+                        <th>Description</th>
+                        <th>Category</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for asset in assets %}
+                    <tr>
+                        <td>{{ asset.name }}</td>
+                        <td>{{ asset.description }}</td>
+                        <td>{{ asset.category }}</td>
+                        <td>
+                            <span class="badge {% if asset.status == 'available' %}bg-success{% else %}bg-danger{% endif %}">
+                                {{ asset.get_status_display }}
+                            </span>
+                        </td>
+                        <td>
+                            <!-- Edit button -->
+                             
+                            {% if user.is_superuser %}
+                                <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editAssetModal{{ asset.id }}">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                            
+                                <!-- Delete button -->
+                                <form method="POST" action="{% url 'main:delete_asset' asset.id %}" style="display:inline;">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-danger btn-sm">
+                                        <i class="fa fa-trash" aria-hidden="true"></i>
+                                    </button>
+                                </form>
+                            {% else %}
+                                {% if asset.status == "available" %}
+                                    <form method="POST" action="{% url 'main:lend_asset' asset.id %}">
+                                        {% csrf_token %}
+                                        <button  type="submit" class="btn btn-primary btn-sm">
+                                            Lend
+                                        </button>
+                                    </form>
+                                {% else %}
+                                    <form method="POST" action="{% url 'main:return_asset' asset.id %}">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-success btn-sm">
+                                            Return
+                                        </button>
+                                    </form>
+                                {% endif %}
+                            {% endif %}
+                        </td>
+                    </tr>
+    
+                    <!-- Edit Modal for each asset -->
+                    <div class="modal fade" id="editAssetModal{{ asset.id }}" tabindex="-1" aria-labelledby="editAssetModalLabel{{ asset.id }}" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="editAssetModalLabel{{ asset.id }}">Edit Asset: {{ asset.name }}</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <form method="POST" action="{% url 'main:edit_asset' asset.id %}">
+                                        {% csrf_token %}
+                                        <div class="mb-3">
+                                            {{ form.name.label_tag }}
+                                            <input type="text" name="name" class="form-control" value="{{ asset.name }}">
+                                        </div>
+    
+                                        <div class="mb-3">
+                                            {{ form.description.label_tag }}
+                                            <textarea name="description" class="form-control" rows="3">{{ asset.description }}</textarea>
+                                        </div>
+    
+                                        <div class="mb-3">
+                                            {{ form.category.label_tag }}
+                                            <input type="text" name="category" class="form-control" value="{{ asset.category }}">
+                                        </div>
+    
+                                        <div class="mb-3">
+                                            {{ form.status.label_tag }}
+                                            <select name="status" class="form-select">
+                                                {% for status, display in form.status.field.choices %}
+                                                    <option value="{{ status }}" {% if status == asset.status %}selected{% endif %}>
+                                                        {{ display }}
+                                                    </option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                        
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                            <button type="submit" class="btn btn-primary">Save changes</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <tr>
+                        <td colspan="5">No assets available.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <a href="{% url 'main:logout_view' %}" class="btn btn-danger me-2">
+                <i class="fas fa-sign-out-alt    "></i>   Logout
+            </a>
+        </div>
+
+        <!-- Modal for creating new assets -->
+        <div class="modal fade" id="addAssetModal" tabindex="-1" aria-labelledby="addAssetModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="addAssetModalLabel">Add New Asset</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form method="POST" action="{% url 'main:asset_view' %}">
+                            {% csrf_token %}
+                            <div class="mb-3">
+                                {{ form.name.label_tag }}
+                                {{ form.name }}
+                            </div>
+
+                            <div class="mb-3">
+                                {{ form.description.label_tag }}
+                                {{ form.description }}
+                            </div>
+
+                            <div class="mb-3">
+                                {{ form.category.label_tag }}
+                                {{ form.category }}
+                            </div>
+
+                            <div class="mb-3">
+                                {{ form.status.label_tag }}
+                                {{ form.status }}
+                            </div>
+                            
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-primary">Add Asset</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endblock %}
