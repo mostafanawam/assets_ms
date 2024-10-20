@@ -45,22 +45,19 @@
                                 </span>
                             {% endif %}
                         </td>
-
-                        <!-- <td>{{asset.created_at}}</td> -->
                         <td>
                             <!-- Edit button -->
                             <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editAssetModal{{ asset.id }}">
                                 edit <i class="fas fa-edit"></i>
                             </button>
-                        
-                            <!-- Delete button -->
-                            <form method="POST" action="{% url 'main:delete_asset' asset.id %}" style="display:inline;">
-                                {% csrf_token %}
-                                <button type="submit" class="btn btn-danger btn-sm">
-                                   delete <i class="fa fa-trash" aria-hidden="true"></i>
-                                </button>
-                            </form>
-                            {% if asset.status == "available" %}
+                            {% if not asset.is_lent %}
+                                <!-- Delete button -->
+                                <form method="POST" action="{% url 'main:delete_asset' asset.id %}" style="display:inline;">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-danger btn-sm">
+                                    delete <i class="fa fa-trash" aria-hidden="true"></i>
+                                    </button>
+                                </form>
                                 <button class="btn btn-success btn-sm" data-bs-toggle="modal"  data-bs-target="#lendModal{{ asset.id }}">
                                     <i class="fas fa-exchange-alt"></i>   
                                     lend
@@ -73,10 +70,9 @@
                                     </button>
                                 </form>
                             {% endif %}
+    
                         </td>
                     </tr>
-
-
                     <!-- Modal -->
                     <div class="modal fade" id="lendModal{{ asset.id }}" tabindex="-1" aria-labelledby="lendModalLabel{{ asset.id }}" aria-hidden="true">
                         <div class="modal-dialog modal-dialog-centered">
