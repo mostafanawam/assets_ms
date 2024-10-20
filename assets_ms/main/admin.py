@@ -1,11 +1,19 @@
 from django.contrib import admin
-from .models import Asset, Lending
+from .models import Asset, Employee, Lending
 
 @admin.register(Asset)
 class AssetAdmin(admin.ModelAdmin):
     list_display = ('name', 'category', 'status')  # Customize what fields are shown in the admin list
     list_filter = ('status', 'category')  # Add filters for status and category
     search_fields = ('name', 'category')  # Add search functionality for name and category
+    
+@admin.register(Employee)
+class EmployeeAdmin(admin.ModelAdmin):
+    list_display = ('name',)  # Customize what fields are shown in the admin list
+    search_fields = ('name',)  # Add search functionality for name and category
+
+
+
 
 
 @admin.register(Lending)

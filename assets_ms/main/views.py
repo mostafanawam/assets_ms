@@ -1,9 +1,11 @@
 from django.shortcuts import get_object_or_404, render, redirect
 from .forms import AssetForm
-from .models import Asset, Lending
+from .models import Asset, Employee, Lending
 from django.contrib.auth import authenticate, login,logout
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.urls import reverse_lazy
+from django.utils import timezone
 
 def login_view(request):
     if request.method == 'POST':
@@ -23,9 +25,8 @@ def logout_view(request):
     logout(request)  # Log the user out
     return redirect('main:login_view')  # Redirect to the login page (or any page you prefer)
 
+@login_required(login_url=reverse_lazy('main:login_view'))
 def asset_view(request):
-    if not request.user.is_authenticated:
-        return redirect('main:login_view')
     if request.method == 'POST':
         # Handle asset creation
         form = AssetForm(request.POST)
@@ -36,19 +37,22 @@ def asset_view(request):
         # Handle GET: Display the list of assets
         assets = Asset.objects.all()
         form = AssetForm()  # Also prepare the form for adding a new asset
-        return render(request, 'assets/asset_list.html', {'assets': assets, 'form': form})
+        context={
+            'assets': assets, 
+            'form': form,
+            "employees":Employee.objects.all()
+        }
+        return render(request, 'assets/asset_list.html',context=context )
 
+@login_required(login_url=reverse_lazy('main:login_view'))
 def delete_asset(request, asset_id):
-    if not request.user.is_authenticated:
-        return redirect('main:login_view')
     asset = get_object_or_404(Asset, id=asset_id)
     if request.method == 'POST':
         asset.delete()
         return redirect('main:asset_view')
     
+@login_required(login_url=reverse_lazy('main:login_view'))
 def edit_asset(request, asset_id):
-    if not request.user.is_authenticated:
-        return redirect('main:login_view')
     asset = get_object_or_404(Asset, id=asset_id)
     
     if request.method == 'POST':
@@ -59,26 +63,29 @@ def edit_asset(request, asset_id):
     else:
         form = AssetForm(instance=asset)
     
+@login_required(login_url=reverse_lazy('main:login_view'))
 def lend_asset(request,asset_id):
-    if not request.user.is_authenticated:
-        return redirect('main:login_view')
-    
     asset = get_object_or_404(Asset, id=asset_id)
+    
     if request.method == 'POST':
+        employee = get_object_or_404(Employee, id=request.POST['employee'])
         Lending.objects.create(
             asset=asset,
-            employee=request.user
+            employee=employee
         )
         asset.status="lent"
         asset.save()
         return redirect('main:asset_view')
-    
+
+
+@login_required(login_url=reverse_lazy('main:login_view'))
 def return_asset(request,asset_id):
-    if not request.user.is_authenticated:
-        return redirect('main:login_view')
     asset = get_object_or_404(Asset, id=asset_id)
     if request.method == 'POST':
         asset.status="available"
         asset.save()
+        current_lending=asset.current_lending
+        current_lending.return_date=timezone.now()
+        current_lending.save()
         return redirect('main:asset_view')
         

@@ -1,0 +1,37 @@
+[
+  {
+    "model": "main.employee",
+    "pk": 1,
+    "fields": {
+      "name": "John Smith"
+    }
+  },
+  {
+    "model": "main.employee",
+    "pk": 2,
+    "fields": {
+      "name": "Jane Doe"
+    }
+  },
+  {
+    "model": "main.employee",
+    "pk": 3,
+    "fields": {
+      "name": "Jessica Williams"
+    }
+  },
+  {
+    "model": "main.employee",
+    "pk": 4,
+    "fields": {
+      "name": "David Garcia"
+    }
+  },
+  {
+    "model": "main.employee",
+    "pk": 5,
+    "fields": {
+      "name": "Laura Wilson"
+    }
+  }
+]

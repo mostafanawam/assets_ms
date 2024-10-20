@@ -1,0 +1,46 @@
+[
+  {
+    "model": "main.asset",
+    "pk": 4,
+    "fields": {
+      "name": "Dell XPS 13",
+      "description": "A high-performance laptop with a sleek design.",
+      "category": "electronics",
+      "status": "available",
+      "created_at": "2024-10-20T15:54:35.734Z"
+    }
+  },
+  {
+    "model": "main.asset",
+    "pk": 5,
+    "fields": {
+      "name": "HP LaserJet Pro",
+      "description": "A fast and efficient laser printer for office use.",
+      "category": "electronics",
+      "status": "available",
+      "created_at": "2024-10-20T15:54:55.442Z"
+    }
+  },
+  {
+    "model": "main.asset",
+    "pk": 6,
+    "fields": {
+      "name": "Office Stapler",
+      "description": "Standard stapler for office use.",
+      "category": "office",
+      "status": "available",
+      "created_at": "2024-10-20T15:55:32.167Z"
+    }
+  },
+  {
+    "model": "main.asset",
+    "pk": 7,
+    "fields": {
+      "name": "Whiteboard",
+      "description": "A magnetic whiteboard for team brainstorming.",
+      "category": "office",
+      "status": "available",
+      "created_at": "2024-10-20T15:55:57.488Z"
+    }
+  }
+]
