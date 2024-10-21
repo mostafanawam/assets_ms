@@ -10,7 +10,7 @@ A Django-based web application that allows companies to manage their assets effi
 ## Screenshots
 
 ### Dashboard
-![Dashboard Screenshot](assets_ms/screenshots/main.png)
+![Dashboard Screenshot](screenshots/main.png)
 
 ### Asset Management
 ![Asset Management Screenshot](path/to/screenshot2.png)
