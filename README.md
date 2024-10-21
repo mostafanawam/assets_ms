@@ -12,8 +12,8 @@ A Django-based web application that allows companies to manage their assets effi
 ### Dashboard
 ![Dashboard Screenshot](screenshots/main.png)
 
-### Asset Management
-![Asset Management Screenshot](path/to/screenshot2.png)
+<!-- ### Asset Management
+![Asset Management Screenshot](path/to/screenshot2.png) -->
 
 ## Prerequisites
 
@@ -43,8 +43,11 @@ Before running this project, make sure you have the following installed:
     ```bash
     pip install -r requirements.txt
     ```
+    or 
 
-
+    ```bash
+    make install
+    ```
 4. **Apply migrations:**
 
     ```bash
