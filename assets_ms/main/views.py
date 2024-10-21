@@ -19,7 +19,7 @@ def login_view(request):
         else:
             messages.error(request, 'Invalid username or password.')
 
-    return render(request, 'assets/login.html')
+    return render(request, 'login.html')
 
 def logout_view(request):
     logout(request)  # Log the user out
@@ -42,7 +42,7 @@ def asset_view(request):
             'form': form,
             "employees":Employee.objects.all()
         }
-        return render(request, 'assets/asset_list.html',context=context )
+        return render(request, 'asset_list.html',context=context )
 
 @login_required(login_url=reverse_lazy('main:login_view'))
 def delete_asset(request, asset_id):
