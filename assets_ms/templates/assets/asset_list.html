@@ -37,12 +37,13 @@
                             </span>
                         </td> -->
                         <td>
+                            <span class="badge {% if asset.status == 'available' %}bg-success{% else %}bg-danger{% endif %}">
+                                {{ asset.get_status_display }}
+                            </span>
+
                             {% if asset.is_lent %}
-                                Lent to <b>{{ asset.current_employee.name }}</b> in {{asset.current_lending.lend_date|date:"Y-m-d"}}
-                            {% else %}
-                                <span class="badge {% if asset.status == 'available' %}bg-success{% else %}bg-danger{% endif %}">
-                                    {{ asset.get_status_display }}
-                                </span>
+                               to <b>{{ asset.current_employee.name }}</b> on {{asset.current_lending.lend_date|date:"Y-m-d"}}
+
                             {% endif %}
                         </td>
                         <td>
