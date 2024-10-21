@@ -64,28 +64,53 @@ Before running this project, make sure you have the following installed:
     python manage.py createsuperuser
     ```
 
-6. **Run the development server:**
+
+6. **(Optional) load testing fixtures(load assets and employees data):**
+
+    ```bash
+    python manage.py loaddata */fixtures/*.test.json
+    ```
+    or 
+
+    ```bash
+    make load-testing
+    ```
+
+
+
+7. **Run the development server:**
 
     ```bash
     python manage.py runserver localhost:8050
     ```
     or 
+
     ```bash
     make backend-server-start
     ```
 
-7. **Access the app in your browser:**
+8. **Access the app in your browser:**
 
     Open your web browser and go to `http://localhost:8050/`.
 
 ## Usage
 
-1. Log in to the admin panel using the credentials you set up with the superuser.
-2. Add assets, employees, and manage asset lending via the provided interfaces.
+1. **Login:**
+   - Use the credentials you created with the superuser during the setup to log in to the dashboard.
+   - Navigate to `http://localhost:8050/` and enter your superuser credentials.
 
-<!-- ## Environment Variables
+2. **Dashboard:**
+   - Once logged in, you will be able to manage company assets and asset lending via the dashboard.
 
-For sensitive settings (like database passwords or secret keys), use a `.env` file in the project root. You can copy the `.env.example` file and update it:
+   - **Manage Assets**: 
+        - Add, update, or delete company assets.
+        - **Note**: You cannot delete an asset if it is currently lent out. The asset must be marked as returned before it can be deleted.
+   
+   - **Manage Asset Lending**: 
+     - Assign assets to employees.
+     - Mark assets as returned when they are no longer in use.
+     - The system will enforce business rules to prevent overlapping borrowing dates.
 
-```bash
-cp .env.example .env -->
+3. **Adding Employees**:
+   - If you haven't loaded the testing fixtures mentioned earlier, you will need to visit `http://localhost:8050/admin/` to add new employees.
+   - After logging in with your superuser credentials, navigate to the Employee section and add new employees as needed.
