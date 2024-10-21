@@ -67,12 +67,16 @@ Before running this project, make sure you have the following installed:
 6. **Run the development server:**
 
     ```bash
-    python manage.py runserver
+    python manage.py runserver localhost:8050
+    ```
+    or 
+    ```bash
+    make backend-server-start
     ```
 
 7. **Access the app in your browser:**
 
-    Open your web browser and go to `http://127.0.0.1:8000/`.
+    Open your web browser and go to `http://localhost:8050/`.
 
 ## Usage
 
