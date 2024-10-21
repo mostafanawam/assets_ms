@@ -51,8 +51,12 @@ Before running this project, make sure you have the following installed:
 4. **Apply migrations:**
 
     ```bash
-    python manage.py migrate
+    python manage.py makemigrations && python manage.py migrate
     ```
+    or 
+
+    ```bash
+    make setup
 
 5. **Create a superuser for the admin panel:**
 
